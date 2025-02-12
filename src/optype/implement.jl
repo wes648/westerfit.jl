@@ -34,9 +34,14 @@ end
 
 #tsrcalc2(prm,stg,cdo,nf,ctrl,jlist)
 function tsrcalc!(vals,vecs,qns,jlist,ctrl,prm,stg,ℋ)
-   σs = σlist()
-   σcnt = ???
+   nfold = ctrl["NFOLD"]
+   mc = ctrl["mcalc"]
+   s = ctrl["S"]
+   msd = convert(Int,(2s+1)*prod(2 .*mc.+1))
+   σs = σgen_indef(nfold)
+   σcnt = size(σs,2)
 for j in jlist
+   jd = Int(2.0*j) + 1
    dest = jvdest2(j,s,vtm) 
    ψ = Psi(J=j,S=ctrl["S"])
    Hrot = hrot2(prm[1:4],ψ)
@@ -47,7 +52,7 @@ for j in jlist
    end
    Hrot = Symmetric(Hrot)
    for sc in 1:σcnt
-      ψ = Psi(Psi(J=j,S=ctrl["S"]),nf=ctrl["NFOLD"],σ=σs[σd],mc=ctrl["mcalc"])
+      ψ = Psi(Psi(J=j,S=s),nf=nfold,σ=σs[σd],mc=mc)
       vals[dest,sc],vecs[1:jd*msd,dest,sc] = tsrdiag_1(Hrot,ℋ,ψ)
       qns[dest,sc] = qnlabv(j,s,nf,vtm,σ)
    end#σs

@@ -321,7 +321,9 @@ function ramassign(vecs,j::Float64,s::Float64,mcalc::Int,vtmax)
    perm = perm[perm .!= 0]
    return perm
 end
-
+#Attempting to generalize ramassign to indefinite fold problem
+#I can simply use a much larger mcalc value and essentially search
+#for the combined m states
 
 ### JACOBI
 #Reorganize matrix to better match my conception of the quantum numbers
